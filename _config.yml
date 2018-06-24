@@ -13,14 +13,14 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: 한국 이더리움 연구회 기술 블로그
+title: 이더리움 연구회 기술 블로그
 email: info@etherstudy.net
 description: >- # this means to ignore newlines until "baseurl:"
-  ‘이더리움 연구회’는 2017년 8월에 시작된 국내 최초의 블록체인 전문가 커뮤니티입니다. 소수의 실력있는 개발자들이 모여 블록체인 작동원리를 연구하면서 ‘이더리움 연구회’가 시작되었습니다. 블록체인 주요 기술뿐만 아니라 다양한 분야의 전문가들이 합류해 합의 알고리즘, 분산 스토리지, 스마트 컨트랙트 등 블록체인 기반 기술과 블록체인 응용서비스(dApp), 크립토 이코노미와 같은 경제적 구조에 대해서도 심도있는 연구를 진행하고 있습니다
+  이더리움 연구회에서 활동하는 소프트웨어 엔지니어들이 작성하는 블로그입니다.
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://etherstudy.net" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: etherstudy
+facebook_username: etherstudy
 github_username:  etherstudy
 
 # Build settings
