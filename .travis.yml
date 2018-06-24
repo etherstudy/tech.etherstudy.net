@@ -1,0 +1,25 @@
+language: ruby
+
+rvm:
+  - 2.4.1
+
+default_branch: develop
+
+git:
+  depth: false
+
+cache: bundler
+
+before_install: true
+
+install:
+  - gem install bundler
+  - bundle install
+
+script:
+  - jekyll build
+  - htmlproofer ./_site --url-swap "https?\:\/\/(localhost\:4000|blog\.etherstudy\.net):"
+
+# before_cache:
+after_success:
+  - ./scripts/update-branch.sh
