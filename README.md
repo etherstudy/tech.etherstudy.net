@@ -61,6 +61,32 @@ bundle exec jekyll serve
 
 
 
+# 웹브라우저를 통해 빠르게 포스트 작성하기
+
+깃허브에서 제공하는 기능을 활용해서 포스트를 빠르게 작성할 수 있습니다.
+
+1. 레포지토리로 이동 후 [Create new file 버튼](https://github.com/etherstudy/tech.etherstudy.net/new/ui-180622)클릭
+
+2. File 이름으로 `_posts/yyyy-mm-dd-title.markdown` 입력 (yyyy, mm, dd, title은 직접 변경하세요)
+
+3. 포스트의 정보를 `---` 사이에 YAML형태로 간단하게 적어주세요. 다음을 참조하면 됩니다. 그리고 그 아래에 포스트를 작성해주세요.
+
+   ````markdown
+   ---
+   layout: post # 바꾸지 마세요.
+   title:  "여기에 새로운 제목을 입력하세요".
+   date:   2018-06-24 19:57:40 +0900 # 작성 날짜를 입력해주세요.
+   author:  저자 이름 <your-email@address.com>
+   ---
+   # H1
+   ## H2
+   여기에 포스트를 작성해주세요
+   ````
+
+4. 기본적으로 Pull request 형식을 따르고, 굳이 리뷰가 필요하지 않을 경우에는 직접 Commit해주세요.
+
+
+
 # Built with Jekyll
 
 This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
