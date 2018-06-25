@@ -10,7 +10,7 @@
 
 본 블로그는 Github pages를 통해 호스팅됩니다. 호스팅되는 브랜치는 `gh-pages` 브랜치이며, 실제로는 `master` 브랜치의 [`.travis.yml`](https://github.com/etherstudy/tech.etherstudy.net/blob/master/.travis.yml) 파일의 `default_branch` 항목이 가리키는 브랜치[![Current Branch](https://img.shields.io/badge/dynamic/yaml.svg?label=current%20branch&url=https%3A%2F%2Fraw.githubusercontent.com%2Fetherstudy%2Ftech.etherstudy.net%2Fmaster%2F.travis.yml&query=%24.default_branch)](https://github.com/etherstudy/tech.etherstudy.net) 에 변경사항이 발생하면, [Travis CI](https://travis-ci)에 의해 변경사항이 `gh-pages` 브랜치로 Force Push 되는 방식으로 업데이트 됩니다. 따라서 새로운 테마를 적용하는 등의 개편을 진행할 때에는 새로운 브랜치를 생성하여 작업한 뒤 `master`의 [`.travis.yml`](https://github.com/etherstudy/tech.etherstudy.net/blob/master/.travis.yml)의 `default_branch` 항목을 해당 브랜치로 변경하면 됩니다.
 
-# Run in local environment
+# Local test
 
 ```
 bundle install
