@@ -1,6 +1,6 @@
 # 이더리움 연구회 기술 블로그
 
-[![Current Branch](https://img.shields.io/badge/dynamic/yaml.svg?label=current%20branch&url=https%3A%2F%2Fraw.githubusercontent.com%2Fetherstudy%2Ftech.etherstudy.net%2Fmaster%2F.travis.yml&query=%24.default_branch)](https://github.com/etherstudy/tech.etherstudy.net) [![Build Status](https://travis-ci.org/etherstudy/tech.etherstudy.net.svg?branch=ui-18062)](https://travis-ci.org/etherstudy/tech.etherstudy.net) [![GitHub issues](https://img.shields.io/github/issues/etherstudy/tech.etherstudy.net.svg)](https://github.com/etherstudy/tech.etherstudy.net) [![GitHub contributors](https://img.shields.io/github/contributors/etherstudy/tech.etherstudy.net.svg)](https://github.com/etherstudy/tech.etherstudy.net/graphs/contributors/)
+[![Current Branch](https://img.shields.io/badge/dynamic/yaml.svg?label=current%20branch&url=https%3A%2F%2Fraw.githubusercontent.com%2Fetherstudy%2Ftech.etherstudy.net%2Fmaster%2F.travis.yml&query=%24.default_branch)](https://github.com/etherstudy/tech.etherstudy.net) [![Build Status](https://travis-ci.org/etherstudy/tech.etherstudy.net.svg?)](https://travis-ci.org/etherstudy/tech.etherstudy.net) [![GitHub issues](https://img.shields.io/github/issues/etherstudy/tech.etherstudy.net.svg)](https://github.com/etherstudy/tech.etherstudy.net) [![GitHub contributors](https://img.shields.io/github/contributors/etherstudy/tech.etherstudy.net.svg)](https://github.com/etherstudy/tech.etherstudy.net/graphs/contributors/)
 
 
 
