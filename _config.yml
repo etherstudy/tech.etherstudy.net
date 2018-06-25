@@ -18,8 +18,8 @@ email: info@etherstudy.net
 description: >- # this means to ignore newlines until "baseurl:"
   이더리움 연구회에서 활동하는 소프트웨어 엔지니어들이 작성하는 블로그입니다.
 
-baseurl: "/tech.etherstudy.net" # the subpath of your site, e.g. /blog
-url: "https://etherstudy.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://tech.etherstudy.net" # the base hostname & protocol for your site, e.g. http://example.com
 facebook_username: etherstudy
 github_username:  etherstudy
 
