@@ -18,7 +18,7 @@ install:
 
 script:
   - jekyll build
-  - htmlproofer ./_site --url-swap "https?\:\/\/(localhost\:4000|blog\.etherstudy\.net):"
+    #  - htmlproofer ./_site --url-swap "https?\:\/\/(localhost\:4000|tech\.etherstudy\.net):"
 
 # before_cache:
 after_success:
