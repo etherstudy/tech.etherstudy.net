@@ -6,10 +6,12 @@ categories: ethereum casper shard
 author:  Wanseob Lim <email@wanseob.com>
 ---
 
-본 글은 2018년 6월 26일 현재 이더리움 연구팀이 제안하는 완전한 PoS에 대한 스펙을 소개하는 글입니다. 이를 통해 향후 캐스퍼 개발이 나아갈 방향을 짐작해볼 수 있습니다.
+본 글은 2018년 6월 26일 현재 이더리움 연구팀이 제안하는 완전한 PoS에 대한 스펙을 번역하여 소개하는 글입니다. 이를 통해 향후 캐스퍼 개발이 나아갈 방향을 짐작해볼 수 있습니다.
 
 본문은 다음을 참고해주시면 감사하겠습니다.
 https://ethresear.ch/t/convenience-link-to-full-casper-chain-v2-spec/2332
+
+내용 전달이 충분치 않은 것에 대해서는 [pull request](https://github.com/etherstudy/tech.etherstudy.net/compare?expand=1)를 통해 보충해주시거나 [issue 등록](https://github.com/etherstudy/tech.etherstudy.net/issues)을 통해 알려주시면 감사하겠습니다.
 
 # TL;DR
 
@@ -28,12 +30,12 @@ https://ethresear.ch/t/convenience-link-to-full-casper-chain-v2-spec/2332
 
 ## Broad description of structure
 
-메인 PoS체인(Central PoS chain)은 현재의 활성화된 검증인(Validator)들의 집합을 관리하고 저장하는 일을 합니다. 현재까지는, 검증인이 는 방법으로 32이더를 담고 있는 트랜잭션을 기존의 PoW체인으로 전송하는 방법이 있습니다. 그 이후 PoS체인이 해당 트랜잭션이 포함된 블록을 다루게 되면 검증인으로 대기하게 되고 곧 이어 활성화된 검증인 명단에 들어가게 됩니다. 활성화된 검증인에서는 로그아웃 시 빠져나올 수 있고, 강제로 종료되었을 경우에는 페널티를 받게 됩니다.
+메인 PoS체인(Central PoS chain)은 현재의 활성화된 검증인(Validator)들의 집합을 관리하고 저장하는 일을 합니다. 현재까지는, 검증인이 되는 방법으로 32이더를 담고 있는 트랜잭션을 기존의 PoW체인으로 전송하는 방법이 있습니다. 그 이후 PoS체인이 해당 트랜잭션이 포함된 블록을 다루게 되면 검증인으로 대기하게 되고 곧 이어 활성화된 검증인 명단에 들어가게 됩니다. 활성화된 검증인에서는 로그아웃 시 빠져나올 수 있고, 강제로 종료되었을 경우에는 페널티를 받게 됩니다.
 
 
 PoS체인의 로드는 주로 샤드체인과 메인 PoS체인을 연결하기 위한 크로스링크(cross-link)로부터 발생합니다. 크로스링크란 "여기 Shard X에 새로운 블록들의 해쉬값이야"를 의미하는 특정한 타입의 트랜잭션입니다. 이 트랜잭션은 페이로드 중 하나로 이 트랜잭션이 올바름을 검증해주는 서명을 무작위로 선정된 M명의 검증인들로부터 3분의 2이상 획득하여 포함해야 합니다. 모든 샤드는 각각 PoS체인이고 또한 샤드체인은 트랜잭션과 계정이 저장되는 곳입니다. 크로스링크는 샤드 체인의 분할들을 메인 체인에 확정("confirm")하는 것에 사용됩니다. 또한 크로스링크는 샤드간 통신을 위한 주된 방법입니다.
 
-> NOTE: 파이썬 코드는 현재 https://github.com/ethereum/beacon_chain 에서 구현중입니다. 아직(18.06.26 기준) 현 문서는 대부분 반영되지 않음.
+> NOTE: 파이썬 코드는 현재 https://github.com/ethereum/beacon_chain 에서 구현중입니다. 아직(18.06.26 기준) 현 문서는 대부분 반영되지 않았음.
 
 # Terminology
 
@@ -162,11 +164,11 @@ fields = {
 }
 ```
 
-루트 상태는 `blake(serialize(crystallized_state))`와 `blake(serialize(active_state))`의 통합과 같습니다. 이는 거의 항상, 결정화된 상태(crystallized state)가 바뀌지 않고, 다시 해쉬될 필요가 없다는 것을 의미합니다. 일반적으로, 활성 상태(active state)는 상대적으로 작은 크기를 가집니다(예를 들면 4백만명의 검증인의 경우 1MB이하입니다. 현실적으로는 100kb 이하가 될 것입니다). 또한 결정화된 상태는 크고 약 10MB에 이릅니다.
+루트 상태는 `blake(serialize(crystallized_state))`와 `blake(serialize(active_state))`를 합친 것과 같습니다. 이는 결정화된 상태(crystallized state)는 거의 항상 바뀌지 않고, 다시 해쉬될 필요가 없다는 것을 의미합니다. 일반적으로 활성 상태(active state)는 상대적으로 작은 크기를 가집니다(예를 들면 4백만명의 검증인의 경우 1MB이하입니다. 현실적으로는 100kb 이하가 될 것입니다). 또한 결정화된 상태는 크고 약 10MB에 이릅니다.
 
 ## Beacon chain processing
 
-비콘 체인을 처리하는 것은 기본적으로 PoW 체인을 처리하는 방법과 많은 츨면에서 유사합니다. 클라이언트는 블록들을 다운로드하고 처리하며, 어떤 체인이 "캐노니컬 체인(canonical chain)"인지 확인합니다. 하지만 비콘체인이 기존 PoW체인과 가지는 관계와, 또 비콘체인이 PoS체인인 것으로 인해, 몇가지 다른점이 존재합니다.
+비콘 체인을 처리하는 것은 기본적으로 PoW 체인을 처리하는 방법과 많은 측면에서 유사합니다. 클라이언트는 블록들을 다운로드하고 처리하며, 어떤 체인이 "캐노니컬 체인(canonical chain)"인지 확인합니다. 하지만 비콘체인이 기존 PoW체인과 가지는 관계와, 또 비콘체인이 PoS체인인 것으로 인해, 몇가지 다른점이 존재합니다.
 
 먼저, 비콘 체인에서의 블록은 노드에 의해 처리되며 블록 처리를 위해서는 다음 세 가지 조건이 만족되어야 합니다.
 
@@ -176,25 +178,27 @@ fields = {
 
 만약 다음 세가지 조건을 만족하지 못하면 클라이언트는 블록처리를 이 조건들이 만족될 때까지 기다리게 됩니다.
 
-블록의 생성과정은 PoS 메커니즘에 의해 PoW와 확연하게 다릅니다. 매번 클라이언트는 헤드를 바꾸게 되고 (아래의 fork choice rule에서 헤드가 어떻게 결정되는지 참조), 블록의 제안자들이 0에서 M(적당하게 큰 숫자)까지의 `skip_count`를 가지도록 계산을 수행합니다. `i`를 선택된 클라이언트의 `skip_count`로 한다면, `timestamp`가 `minimum_timestamp(head) + PER_HEIGHT_DELAY + i * PER_SKIP_DELAY`에 다다를때, 그리고 헤드가 아직 바뀌지 않았을 때, 이 때 클라이언트는 새로운 블록을 발행하게 됩니다.
+블록의 생성과정은 PoW와 확연하게 다른 PoS 메커니즘에 의해 진행됩니다. 매번 클라이언트는 헤드를 바꾸게 되고 (아래의 fork choice rule에서 헤드가 어떻게 결정되는지 참조), 블록의 제안자들이 0에서 M(적당하게 큰 숫자)까지의 `skip_count`를 가지도록 계산을 수행합니다. `i`를 선택된 클라이언트의 `skip_count`로 한다면, `timestamp`가 `minimum_timestamp(head) + PER_HEIGHT_DELAY + i * PER_SKIP_DELAY`에 다다를때, 그리고 헤드가 아직 바뀌지 않았을 때, 이 때 클라이언트는 새로운 블록을 발행하게 됩니다.
 
 클라이언트가 헤드를 바꿀 때는 증인들(attesters, 서명을 제공하는 검증인들)의 리스트를 다시 계산합니다. 그리고 즉시 증인에 해당할 경우, 즉시 해당 블록에 대한 부모 블록과 개인키를 활용하여 서명을 만들어 증명을 발행합니다.
+
+> 역자 NOTE: PoS에서는 지정된 Prosper가 제 기능을 하지 못할 때를 대비해 다른 Prosper가 블록을 생성할 수 있도록 해야 하는데 `skip_count`는 이 과정에서 언클블록이 불필요하게 발생하지 않도록 억제역할을 할 수 있습니다.
 
 ## Beacon chain fork choice rule
 
 비콘 체인이 독자적인 PoS가 되면, 포크 선택 규칙은 *highest-scoring-block* 규칙을 따르게 됩니다. 이 것은 Casper FFG의 스코어 정책과 같습니다.
 
-```
+```.python
 score = last_justified_epoch + height * ε
 ```
 
-비콘 체인이 PoW 체인을 따라가며 구현되지만, 포크 선택 규칙은 독립적입니다. 비콘 체인에서는 가장 높은 점수를 가지는 메인체인을 `main_chain_ref`로 가리키고 있고 비콘 체인 블록 중에서 가장 높은 점수를 가지고 있는 블록이 바로 헤드가 됩니다.
+비콘 체인은 PoW 체인을 추적하도록 구현되지만, 비콘 체인의 포크 선택 규칙은 독립적입니다. 비콘 체인에서는 가장 높은 점수를 가지는 메인체인을 `main_chain_ref`로 가리키고 있고 비콘 체인 블록 중에서 가장 높은 점수를 가지고 있는 블록이 바로 헤드가 됩니다.
 
-`main_chain_ref`가 부모 블록과 자손 블록 간 같은지 확인해야 하는 추가적인 검증 조건이 추가되었기 때문에, 비콘 체인 상 블록들의 *모든* `main_chain_ref`들이 메인체인 상(가장 점수가 높은)에 존재한다는 것을 알 수 있습니다. 이로써 비콘 체인이 실제 캐노니컬 메인 체인(현재는 PoW)과 연결되어 있는 것을 확실하게 해줍니다.
+`main_chain_ref`가 부모 블록과 자손 블록 간 같은지 확인해야 하는 추가적인 검증 조건이 있기 때문에, 비콘 체인 상 블록들의 *모든* `main_chain_ref`들이 메인체인 상(가장 점수가 높은)에 존재한다는 것을 알 수 있습니다. 이로써 비콘 체인이 실제 캐노니컬 메인 체인(현재는 PoW)과 연결되어 있는 것을 확실하게 해줍니다.
 
-> 가장 높은 점수의 메인체인(highest-scoring main chain)이 곧 캐노니컬 메인 체인(canonical main chain)이라고 이해하면 됩니다.
+> 역자 NOTE: 가장 높은 점수의 메인체인(highest-scoring main chain)이 곧 캐노니컬 메인 체인(canonical main chain)이라고 이해하면 됩니다.
 
-포크를 선택하는 것을 다음 알고리즘들을 통해 "온라인으로 업데이트"가 가능해야 합니다. 먼저, 메인 체인과 비콘 체인의 헤드 뿐만 아니라 모든 층의 블록을 계속하여 추적하는 것이 중요합니다. 매 헤드의 변경마다 실행되는 다음 알고리즘으로 이 것이 유지될 수 있습니다.
+포크를 선택하는 것은 다음 알고리즘들을 통해 "온라인으로 업데이트"가 가능해야 합니다. 먼저, 메인 체인과 비콘 체인의 헤드 뿐만 아니라 모든 층의 블록을 계속하여 추적하는 것이 중요합니다. 매 헤드의 변경마다 실행되는 다음 알고리즘으로 이 것이 유지될 수 있습니다.
 
 ```.python
 def update_head(chain, old_head, new_head):
@@ -213,7 +217,7 @@ def update_head(chain, old_head, new_head):
     chain = chain[:a.height + 1] + new_chain
 ```
 
-새로운 비콘 체인 블록을 받으면, 그 점수가 현재 헤드의 점수를 넘을 때 그리고 새로 받은 블록의 `main_chain_ref`가 메인 체인에 존재할 때 헤드를 변경합니다. 코드는 다음과 같습니다.
+새로운 비콘 체인 블록을 받으면, 그 점수가 현재 헤드의 점수를 넘고 새로 받은 블록의 `main_chain_ref`가 메인 체인에 존재할 때 헤드를 변경합니다. 코드는 다음과 같습니다.
 
 ```.python
 def should_I_change_head(main_chain, old_beacon_head, new_beacon_block):
@@ -242,7 +246,7 @@ def reorg_beacon_chain(main_chain, beacon_chain):
 
 ## Beacon chain state transition function
 
-이제 상태 변경 함수에 대해 정의합니다. 추상적 레벨에서 상태 변경은 두 부분으로 구성되어 있습니다.
+이제 상태 변경 함수에 대해 정의합니다. 상태 변경은 두 가지가 있습니다.
 
 1. 에폭 상태변경(The epoch transition)은 `active_state.height % SHARD_COUNT == 0`의 조건에서만 발생합니다. 그리고 결정화된 상태(crystallized state)와 활성상태(active state)를 모두 변경합니다.
 1. 블록당 처리(The per-block processing)은 모든 블록마다 진행되고 활성상태에만 영향을 끼칩니다. 에폭 상태변경(The epoch transition)이 진행되는 블록이라면 에폭 상태변경 이후에 처리됩니다.
@@ -251,7 +255,7 @@ def reorg_beacon_chain(main_chain, beacon_chain):
 
 ### Helper functions
 
-몇 가지 보조 알고리즘을 정의하면서 시작해보겠습니다. 먼저, 검증인 집합을 어떤 `seed`에 따라 유사난수적으로 섞는(shuffling) 알고리즘입니다.
+몇 가지 보조 알고리즘을 보겠습니다. 먼저, 검증인 집합을 어떤 `seed`에 따라 유사난수적으로 섞는(shuffling) 알고리즘입니다.
 
 ```.python
 def get_shuffling(seed, validator_count):
@@ -273,7 +277,7 @@ def get_shuffling(seed, validator_count):
     return o
 ```
 
-다음 알고리즘은 샤드 위원회를 선택하고 블록 제안자(prosper)들과 증인(attester)들을 선택하는 것에 사용되는 알고리즘입니다. 주어진 블록에 대해 증인을 선택하고 그 블록의 N-skip 된 블록 제안자를 선정하는 응용입니다.
+다음 알고리즘은 샤드 위원회를 선택하고 블록 제안자(prosper)들과 증인(attester)들을 선택하는 것에 사용되는 알고리즘입니다. 주어진 블록에 대해 증인을 선택하고 그 블록의 N-skip 된 블록 제안자를 선정하는 것입니다.
 
 ```.python
 def get_attesters_and_proposer(crystallized_state, active_state, skip_count):
@@ -317,9 +321,9 @@ def get_crosslink_notaries(crystallized_state, shard_id):
 
 블록당 기대되는 증인들의 숫자는 대략 `min(len(crystallized_state.active_validators), ATTESTER_COUNT)`입니다. 이 값을 `attester_count`라고 두겠습니다. 증인의 `attestation_bitfield`는 `(attester_count + 7) // 8`의 길이를 가지는 바이트 배열인데, 이 것은 좌에서 우로 향하는 비트리스트라고 보면 됩니다(예를 들면 bit 0은 `attestation_bitfield[0] >> 7`이고 bit 9는 `attestation_bitfield[1] >> 6 입니다`). `attester_count - 1`의 모든 비트는 0입니다. 그리고 증인의 총 수(즉, 1 비트값들의 총 수)는 최소 `attester_count / (2 + block.skip_count)`입니다.
 
-`bitfield`의 1 비트들은 `get_attesters_and_prospers()`를 통해 추출한 증인들의 하위 집합입니다. 증인들의 인덱스들을 추출하고 그것으로 `crystallized_state.active_validators` 로부터 공개 키들을 가져옵니다. 그리고 이 공개 키들을 키집합(aggregate key)에 추가합니다. BLS는 블록상에서 키집합을 공개키로 사용하는 `attestation_aggregate_sig`를 검증하고, 부모 블록을 직렬화시켜 메세지를 만듭니다. 검증이 통과되는 것을 확실히 해야 합니다.
+`bitfield`의 1 비트들은 `get_attesters_and_prospers()`를 통해 추출한 증인들의 하위 집합입니다. 증인들의 인덱스들을 추출하고 그것으로 `crystallized_state.active_validators` 로부터 공개 키들을 가져옵니다. 그리고 이 공개 키들을 키집합(aggregate key)에 추가합니다. BLS는 블록상에서 키집합을 공개키로 사용하는 `attestation_aggregate_sig`를 검증하고, 부모 블록을 직렬화시켜 메세지를 만듭니다. 검증이 통과되는 것을 확실히 해야만 합니다.
 
-`recent_prospers` 리스트는 블록제안자(prosper)들의 인덱스와 블록제안자의 RANDAO Preimage, 서명을 포함한 증인들의 수를 포함하고 있습니다. `recent_proposers` 리스트에 `ProsperRecord`를 더합니다. 그리고 증인들의 인덱스(bitfield index)를 `recent_attesters`에 더해줍니다.
+`recent_prospers` 리스트는 블록제안자(prosper)들의 인덱스와 블록제안자의 RANDAO Preimage, 서명을 포함한 증인들의 수를 포함하고 있습니다. `recent_propsers` 리스트에 `ProsperRecord`를 더합니다. 그리고 증인들의 인덱스(bitfield index)를 `recent_attesters`에 더해줍니다.
 
 ### Checking partial crosslink records
 
@@ -339,7 +343,7 @@ fields = {
 - `get_shard_attesters`를 사용하여 크로스링크 증인들의 인덱스 리스트를 받아옵니다. 블록 증인들이 하는 것처럼 증인들의 서명을 공증인의 bitfield를 통해 검증합니다.
 - 만일 같은 샤드 ID와 해쉬에 `PartialCrosslinkRecord` 객체가 이미 존재한다면 `AggregateVote`에 참여한 검증인들(voter_bitfield |= AggregateVote.notary_bitfield)의 로컬 인덱스를 `voter_bitfield`에 추가합니다. 아직 `PartialCrosslinkRecord`가 추가되지 않았다면 새로 만들어 넣습니다.
 - 또한, 투표자들의 인덱스를 `active_state.ffg_voter_bitfield`에도 추가해줍니다.
-- 만일, 아직 투표를 진행하지 않은 n명의 투표자가 있다면, 블록 제안자에게 n만큼 보상으로 지급하고 잔고를 차이를 기록합니다
+- 만일, 아직 투표를 진행하지 않은 n명의 투표자가 있다면, 블록 제안자에게 n만큼 보상으로 지급하고 `balance_delta`를 기록합니다
 - `shard_block_hash`의 순서로 정렬된 `PartialCrosslinkRecord`의 새로운 리스트를 저장합니다.
 
 ### Miscellaneous
@@ -347,7 +351,7 @@ fields = {
 - 블록 height를 1씩 증가시킵니다.
 - 서명집합이 모두 0바이트로 설정된 블록을 사용하거, 서명을 블록 상에서 검증합니다.
 - 총 skip count를 블록의 skip count에 따라서 늘려나갑니다.
-- 블록의 RANDAO reveal이 블록제안자의 저장된 RANDAO 커밋 이미지의 해쉬값과 일치하는지 검증합니다. 활성 RANDAO 상태(active RANDAO state)에 블록의 RANDAO reveal값을 배타논리합을 시키고, 블록의 RANDAO reveal값으 블록제안자의 새 커밋으로 정합니다.
+- 블록의 RANDAO reveal이 블록제안자의 저장된 RANDAO 커밋 이미지의 해쉬값과 일치하는지 검증합니다. 활성 RANDAO 상태(active RANDAO state)에 블록의 RANDAO reveal값을 배타논리합을 시키고, 블록의 RANDAO reveal값을 블록제안자의 새 커밋으로 정합니다.
 Increase the total skip count by the block’s skip count
 
 ## Epoch transitions
@@ -355,13 +359,14 @@ Increase the total skip count by the block’s skip count
 현재 블록 높이를 `SHARD_COUNT`로 나눈 나머지가 0일 경우, 에폭 변환(epoch transition)을 실행합니다. 에폭 변환은 다음 몇가지 부분으로 나뉩니다.
 
 ### Calculate rewards for FFG votes
+
 - 활성 상태(active state)상의 FFT voter bitfeild에 따라, 마지막 에폭에 참가한 모든 검증인들의 잔고를 계산합니다. 만약 이 값이 모든 검증인의 잔고의 3분의 2보다 크거나 같으면 `crystallized_state.justified_epoch`를 `crystallized_state.current_epoch`와 같도록 설정합니다. 이 때, 기존의 justified 에폭이 `crystallized_state.current_epoch -1`와 같았다면, 그 값을 `crystallized_state.finalized_epoch`으로 설정합니다.
 
   > current epoch -> justified epoch -> finalized epoch
 
 - Casper FFG 인센티브와 *quadratic leak rules* 에 따라, `online_reward`를 계산하고 `offline_penalty`를  계산합니다. (아직 완벽하게 명시되지 않음)
 
-- `online_reward` 를 마지막 에폭에 참여한 모든 검다증인에게 제공하고 `offline_penalty`를 참여하지 않은 검증인으로부터 차감합니다.
+- `online_reward` 를 마지막 에폭에 참여한 모든 검증인에게 제공하고 `offline_penalty`를 참여하지 않은 검증인으로부터 차감합니다.
 
 
 
@@ -369,8 +374,8 @@ Increase the total skip count by the block’s skip count
 
 다음을 모든 샤드에 대해서 반복합니다.
 
-- 크로스링크에 대한 `online_reward`와 `offline_penalty`를  계산
-- 가장 많은 투표(체크포인트 해쉬에 따라 정렬함)를 받은 파셜 크로스링크(partial crosslink)를 취합니다. 해당 크로스링크에 참여한 검증인들을 보상하고 그렇지 않은 검증인들에게는 페널티를 부과합니다.
+- 크로스링크에 대한 `online_reward`와 `offline_penalty`를 계산
+- 가장 많은 투표(체크포인트 해쉬에 따라 정렬함)를 받은 파셜 크로스링크(partial crosslink)를 취합니다. 파셜 크로스링크에 참여한 검증인들을 보상하고 그렇지 않은 검증인들에게는 페널티를 부과합니다.
 - 현재 에폭에서의 잔고 변경은 반영하지 않은 상태로 계산하였을 때, 총 잔고의 3분의 2 이상의 투표를 획득하는 크로스 링크가 있으면 그 것을 가장 최근의 크로스 링크로 저장합니다.
 
 ## Process balance deltas
