@@ -111,7 +111,7 @@ fields = {
 }
 ```
 
-`RecentProposerRecord`는 최근의 블록 제안자(Prosper)들을 기록하는 객체로 다음 필드를 가집니다.
+`RecentProposerRecord`는 최근의 블록 제안자(Proposer)들을 기록하는 객체로 다음 필드를 가집니다.
 
 ```.python
 fields = {
@@ -182,7 +182,7 @@ fields = {
 
 클라이언트가 헤드를 바꿀 때는 증인들(attesters, 서명을 제공하는 검증인들)의 리스트를 다시 계산합니다. 그리고 즉시 증인에 해당할 경우, 즉시 해당 블록에 대한 부모 블록과 개인키를 활용하여 서명을 만들어 증명을 발행합니다.
 
-> 역자 NOTE: PoS에서는 지정된 Prosper가 제 기능을 하지 못할 때를 대비해 다른 Prosper가 블록을 생성할 수 있도록 해야 하는데 `skip_count`는 이 과정에서 언클블록이 불필요하게 발생하지 않도록 억제역할을 할 수 있습니다.
+> 역자 NOTE: PoS에서는 지정된 Proposer가 제 기능을 하지 못할 때를 대비해 다른 Proposer가 블록을 생성할 수 있도록 해야 하는데 `skip_count`는 이 과정에서 언클블록이 불필요하게 발생하지 않도록 억제역할을 할 수 있습니다.
 
 ## Beacon chain fork choice rule
 
@@ -277,7 +277,7 @@ def get_shuffling(seed, validator_count):
     return o
 ```
 
-다음 알고리즘은 샤드 위원회를 선택하고 블록 제안자(prosper)들과 증인(attester)들을 선택하는 것에 사용되는 알고리즘입니다. 주어진 블록에 대해 증인을 선택하고 그 블록의 N-skip 된 블록 제안자를 선정하는 것입니다.
+다음 알고리즘은 샤드 위원회를 선택하고 블록 제안자(proposer)들과 증인(attester)들을 선택하는 것에 사용되는 알고리즘입니다. 주어진 블록에 대해 증인을 선택하고 그 블록의 N-skip 된 블록 제안자를 선정하는 것입니다.
 
 ```.python
 def get_attesters_and_proposer(crystallized_state, active_state, skip_count):
@@ -321,9 +321,9 @@ def get_crosslink_notaries(crystallized_state, shard_id):
 
 블록당 기대되는 증인들의 숫자는 대략 `min(len(crystallized_state.active_validators), ATTESTER_COUNT)`입니다. 이 값을 `attester_count`라고 두겠습니다. 증인의 `attestation_bitfield`는 `(attester_count + 7) // 8`의 길이를 가지는 바이트 배열인데, 이 것은 좌에서 우로 향하는 비트리스트라고 보면 됩니다(예를 들면 bit 0은 `attestation_bitfield[0] >> 7`이고 bit 9는 `attestation_bitfield[1] >> 6 입니다`). `attester_count - 1`의 모든 비트는 0입니다. 그리고 증인의 총 수(즉, 1 비트값들의 총 수)는 최소 `attester_count / (2 + block.skip_count)`입니다.
 
-`bitfield`의 1 비트들은 `get_attesters_and_prospers()`를 통해 추출한 증인들의 하위 집합입니다. 증인들의 인덱스들을 추출하고 그것으로 `crystallized_state.active_validators` 로부터 공개 키들을 가져옵니다. 그리고 이 공개 키들을 키집합(aggregate key)에 추가합니다. BLS는 블록상에서 키집합을 공개키로 사용하는 `attestation_aggregate_sig`를 검증하고, 부모 블록을 직렬화시켜 메세지를 만듭니다. 검증이 통과되는 것을 확실히 해야만 합니다.
+`bitfield`의 1 비트들은 `get_attesters_and_proposers()`를 통해 추출한 증인들의 하위 집합입니다. 증인들의 인덱스들을 추출하고 그것으로 `crystallized_state.active_validators` 로부터 공개 키들을 가져옵니다. 그리고 이 공개 키들을 키집합(aggregate key)에 추가합니다. BLS는 블록상에서 키집합을 공개키로 사용하는 `attestation_aggregate_sig`를 검증하고, 부모 블록을 직렬화시켜 메세지를 만듭니다. 검증이 통과되는 것을 확실히 해야만 합니다.
 
-`recent_prospers` 리스트는 블록제안자(prosper)들의 인덱스와 블록제안자의 RANDAO Preimage, 서명을 포함한 증인들의 수를 포함하고 있습니다. `recent_propsers` 리스트에 `ProsperRecord`를 더합니다. 그리고 증인들의 인덱스(bitfield index)를 `recent_attesters`에 더해줍니다.
+`recent_proposers` 리스트는 블록제안자(proposer)들의 인덱스와 블록제안자의 RANDAO Preimage, 서명을 포함한 증인들의 수를 포함하고 있습니다. `recent_propsers` 리스트에 `ProposerRecord`를 더합니다. 그리고 증인들의 인덱스(bitfield index)를 `recent_attesters`에 더해줍니다.
 
 ### Checking partial crosslink records
 
@@ -380,7 +380,7 @@ Increase the total skip count by the block’s skip count
 
 ## Process balance deltas
 
-`recent_attesters`에 포함된 모든 증인들의 잔고를 1 추가합니다. `recent_prospers`에 포함된 모든 블록생성자의 잔고를 `RecentProposerRecord` 객체의 `balance_delta` 만큼 증가시킵니다.
+`recent_attesters`에 포함된 모든 증인들의 잔고를 1 추가합니다. `recent_proposers`에 포함된 모든 블록생성자의 잔고를 `RecentProposerRecord` 객체의 `balance_delta` 만큼 증가시킵니다.
 
 ## Crosslink seed-related calculations
 
