@@ -152,7 +152,7 @@ $ geth init genesis.json --datadir=validator-node
 $ cd $GOPATH/src/github.com/ethereum/go-ethereum/cmd/geth
 $ dlv debug -- --networkid=1234 --datadir=$PROJ_DIR/miner-node
 ```
-> dlv를 geth binary에 붙여서 사용하는 것도 가능한 방법입니다. 하지만, 자세한 바이너리를 사용할 때엔 디버그에 한계가 있어 소스코드를 준비한 뒤 디버그 모드로 실행하는 편이 낫습니다.
+> dlv를 geth binary에 붙여서 사용하는 것도 가능한 방법입니다. 하지만, 바이너리를 사용할 때엔 자세한 디버그에 한계가 있어 소스코드를 준비한 뒤 디버그 모드로 실행하는 편이 낫습니다.
 
 위에 나열한 메소드들을 breakpoint로 지정하고 추적해보겠습니다.
 
@@ -166,7 +166,7 @@ Breakpoint 3 set at 0x for ...
 (dlv) break BlockChain.insert
 Breakpoint 4 set at 0x for ...
 ```
-continue를 입력해 노드를 동작시키면 시작과동시에 바로 다음  브레이크포인트에서 멈추게 됩니다.
+continue를 입력해 노드를 동작시키면 시작과 동시에 바로 다음 브레이크포인트에서 멈추게 됩니다.
 
 ```bash
 (dlv) continue
@@ -225,7 +225,6 @@ continue를 입력해 노드를 동작시키면 시작과동시에 바로 다음
 `newWorker`: 마이너 객체가 생성될 때, 작업자 객체를 생성하도록 함.
 
 `commitNewWork`: 작업자 객체가 생성될 때, 작업을 할당함.
-
 
 
 다시 continue를 입력해서 노드를 동작시키겠습니다.
