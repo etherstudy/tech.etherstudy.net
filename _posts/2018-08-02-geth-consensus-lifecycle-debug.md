@@ -63,7 +63,7 @@ author:  Wasneob Lim
 
 
 
-## Pre requisites
+## Prerequisites
 
 1. go-ethereum 소스코드와 geth binary를 준비합니다.
 
