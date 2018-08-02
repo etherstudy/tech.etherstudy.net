@@ -3,7 +3,7 @@ language: ruby
 rvm:
   - 2.4.1
 
-default_branch: ui-180622
+default_branch: null
 
 git:
   depth: false
